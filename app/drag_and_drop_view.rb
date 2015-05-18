@@ -1,0 +1,2 @@
+class DragAndDropView < NSImageView
+end
