@@ -6,6 +6,16 @@ class AppDelegate
     @drag_and_drop = DragAndDropView.alloc.initWithFrame(CGRectZero)
     self.set_drag_and_drop_frame
     @mainWindow.contentView.addSubview(@drag_and_drop)
+
+    @label = NSTextField.alloc.initWithFrame(CGRectZero)
+    @label.bezeled = false
+    @label.drawsBackground = false
+    @label.editable = false
+    @label.selectable = false
+    @label.alignment = NSCenterTextAlignment
+    @label.stringValue = "Drag a file above"
+    self.set_label_frame
+    @mainWindow.contentView.addSubview @label
   end
 
   def set_drag_and_drop_frame
@@ -14,6 +24,15 @@ class AppDelegate
     @drag_and_drop.frame = [
       [(window_size.width / 2.0) - (drag_and_drop_size[0] / 2.0), (window_size.height / 2.0) - (drag_and_drop_size[1] / 2.0)],
       drag_and_drop_size
+    ]
+  end
+
+  def set_label_frame
+    window_size = @mainWindow.frame.size
+    label_size = [200, 50]
+    @label.frame = [
+      [(window_size.width / 2.0) - (label_size[0] / 2.0), @drag_and_drop.frame.origin.y - label_size[1]],
+      label_size
     ]
   end
 
@@ -29,5 +48,6 @@ class AppDelegate
 
   def windowDidResize(sender)
     self.set_drag_and_drop_frame
+    self.set_label_frame
   end
 end
