@@ -4,6 +4,7 @@ class AppDelegate
     buildWindow
 
     @drag_and_drop = DragAndDropView.alloc.initWithFrame(CGRectZero)
+    @drag_and_drop.delegate = self
     self.set_drag_and_drop_frame
     @mainWindow.contentView.addSubview(@drag_and_drop)
 
@@ -49,5 +50,9 @@ class AppDelegate
   def windowDidResize(sender)
     self.set_drag_and_drop_frame
     self.set_label_frame
+  end
+
+  def drag_received_for_file_paths(paths)
+    @label.stringValue = "Received: #{paths.join(',')}"
   end
 end
