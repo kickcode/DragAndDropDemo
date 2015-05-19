@@ -34,6 +34,9 @@ class DragAndDropView < NSImageView
       if info.draggingPasteboard.types.include?('NSFilenamesPboardType')
         files = info.draggingPasteboard.propertyListForType('NSFilenamesPboardType')
         self.send_delegate_event(:drag_received_for_file_paths, files)
+      elsif info.draggingPasteboard.types.include?('WebURLsWithTitlesPboardType')
+        url, title = info.draggingPasteboard.propertyListForType('WebURLsWithTitlesPboardType').flatten
+        self.send_delegate_event(:drag_received_for_url_and_title, url, title)
       elsif info.draggingPasteboard.types.include?('public.url')
         url = info.draggingPasteboard.propertyListForType('public.url')
         self.send_delegate_event(:drag_received_for_url, url) unless url.nil?
@@ -64,10 +67,10 @@ class DragAndDropView < NSImageView
     end
   end
 
-  def send_delegate_event(name, arg)
+  def send_delegate_event(name, *args)
     return if self.delegate.nil?
     return unless self.delegate.respond_to?(name.to_sym)
 
-    self.delegate.send(name, arg)
+    self.delegate.send(name, *args)
   end
 end

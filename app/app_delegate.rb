@@ -63,4 +63,9 @@ class AppDelegate
   def drag_received_for_url(url)
     @label.stringValue = "Received: #{url}"
   end
+
+  def drag_received_for_url_and_title(url, title)
+    @label.stringValue = "Received: #{url}"
+    @mainWindow.title = title
+  end
 end
