@@ -1,6 +1,14 @@
 class DragAndDropView < NSImageView
   attr_accessor :delegate
 
+  def initWithFrame(frame)
+    super(frame)
+
+    self.registerForDraggedTypes([NSStringPboardType])
+
+    self
+  end
+
   def draggingEntered(info)
     self.highlight!
     NSDragOperationCopy
@@ -27,6 +35,9 @@ class DragAndDropView < NSImageView
         files = info.draggingPasteboard.propertyListForType('NSFilenamesPboardType')
         self.send_delegate_event(:drag_received_for_file_paths, files)
       end
+
+      text = info.draggingPasteboard.stringForType(NSPasteboardTypeString)
+      self.send_delegate_event(:drag_received_for_text, text) unless text.nil?
     end
   end
 

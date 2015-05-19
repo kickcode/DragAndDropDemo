@@ -55,4 +55,8 @@ class AppDelegate
   def drag_received_for_file_paths(paths)
     @label.stringValue = "Received: #{paths.join(',')}"
   end
+
+  def drag_received_for_text(text)
+    @label.stringValue = "Received: #{text}"
+  end
 end
