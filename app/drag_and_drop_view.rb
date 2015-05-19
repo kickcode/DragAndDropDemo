@@ -24,12 +24,7 @@ class DragAndDropView < NSImageView
 
   def performDragOperation(info)
     if info.draggingSource != self
-      if NSImage.canInitWithPasteboard(info.draggingPasteboard)
-        image = NSImage.alloc.initWithPasteboard(info.draggingPasteboard)
-      else
-        image = NSImage.imageNamed("file_icon")
-      end
-      self.setImage(image)
+      image = NSImage.alloc.initWithPasteboard(info.draggingPasteboard) if NSImage.canInitWithPasteboard(info.draggingPasteboard)
 
       if info.draggingPasteboard.types.include?('NSFilenamesPboardType')
         files = info.draggingPasteboard.propertyListForType('NSFilenamesPboardType')
@@ -37,13 +32,19 @@ class DragAndDropView < NSImageView
       elsif info.draggingPasteboard.types.include?('WebURLsWithTitlesPboardType')
         url, title = info.draggingPasteboard.propertyListForType('WebURLsWithTitlesPboardType').flatten
         self.send_delegate_event(:drag_received_for_url_and_title, url, title)
+        image = NSImage.imageNamed("url_icon")
       elsif info.draggingPasteboard.types.include?('public.url')
         url = info.draggingPasteboard.propertyListForType('public.url')
         self.send_delegate_event(:drag_received_for_url, url) unless url.nil?
+        image = NSImage.imageNamed("url_icon")
       else
         text = info.draggingPasteboard.stringForType(NSPasteboardTypeString)
         self.send_delegate_event(:drag_received_for_text, text) unless text.nil?
+        image = NSImage.imageNamed("text_icon")
       end
+
+      image ||= NSImage.imageNamed("file_icon")
+      self.setImage(image)
     end
   end
 
