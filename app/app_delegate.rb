@@ -59,4 +59,8 @@ class AppDelegate
   def drag_received_for_text(text)
     @label.stringValue = "Received: #{text}"
   end
+
+  def drag_received_for_url(url)
+    @label.stringValue = "Received: #{url}"
+  end
 end

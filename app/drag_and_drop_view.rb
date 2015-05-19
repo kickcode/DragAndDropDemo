@@ -4,7 +4,7 @@ class DragAndDropView < NSImageView
   def initWithFrame(frame)
     super(frame)
 
-    self.registerForDraggedTypes([NSStringPboardType])
+    self.registerForDraggedTypes([NSStringPboardType, NSURLPboardType])
 
     self
   end
@@ -38,6 +38,9 @@ class DragAndDropView < NSImageView
 
       text = info.draggingPasteboard.stringForType(NSPasteboardTypeString)
       self.send_delegate_event(:drag_received_for_text, text) unless text.nil?
+
+      url = NSURL.URLFromPasteboard(info.draggingPasteboard)
+      self.send_delegate_event(:drag_received_for_url, url.absoluteString) unless url.nil?
     end
   end
 
