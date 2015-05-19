@@ -34,13 +34,13 @@ class DragAndDropView < NSImageView
       if info.draggingPasteboard.types.include?('NSFilenamesPboardType')
         files = info.draggingPasteboard.propertyListForType('NSFilenamesPboardType')
         self.send_delegate_event(:drag_received_for_file_paths, files)
+      elsif info.draggingPasteboard.types.include?('public.url')
+        url = info.draggingPasteboard.propertyListForType('public.url')
+        self.send_delegate_event(:drag_received_for_url, url) unless url.nil?
+      else
+        text = info.draggingPasteboard.stringForType(NSPasteboardTypeString)
+        self.send_delegate_event(:drag_received_for_text, text) unless text.nil?
       end
-
-      text = info.draggingPasteboard.stringForType(NSPasteboardTypeString)
-      self.send_delegate_event(:drag_received_for_text, text) unless text.nil?
-
-      url = info.draggingPasteboard.propertyListForType('public.url')
-      self.send_delegate_event(:drag_received_for_url, url) unless url.nil?
     end
   end
 
