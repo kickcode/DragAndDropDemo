@@ -39,8 +39,8 @@ class DragAndDropView < NSImageView
       text = info.draggingPasteboard.stringForType(NSPasteboardTypeString)
       self.send_delegate_event(:drag_received_for_text, text) unless text.nil?
 
-      url = NSURL.URLFromPasteboard(info.draggingPasteboard)
-      self.send_delegate_event(:drag_received_for_url, url.absoluteString) unless url.nil?
+      url = info.draggingPasteboard.propertyListForType('public.url')
+      self.send_delegate_event(:drag_received_for_url, url) unless url.nil?
     end
   end
 
